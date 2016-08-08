@@ -1,0 +1,80 @@
+ <!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Peeranut Pongpakatien">
+
+    <title>ACEAM-DATA</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="css/plugins/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kanit&subset=thai,latin' rel='stylesheet' type='text/css'>
+
+      <link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css" />
+      <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+      <script type="text/javascript" src="moment.js"></script>
+      <script type="text/javascript" src="daterangepicker.js"></script>
+                    <div class="row">
+                    <div class="col-lg-4"> </div>
+                            <div class="col-lg-4">
+                                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                <span></span> <b class="caret"></b>
+                                </div>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-4"> </div>
+                            <div class="col-lg-4">
+                               <p id="command">Your Date Range Picker</p>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-4"> </div>
+                            <div class="col-lg-4">
+                               <p id="Alldata"></p>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+
+
+  <script src="js/bootstrap.js"></script>
+    <!-- Hight chart Charts JavaScript -->
+
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/highstock.js"></script>
+  <script src="Highcharts/js/themes/lil.js"></script>
+  <script src="js/exporting.js"></script>
+  <script src="js/export-csv.js"></script>
+  <script type="text/javascript" src="script.js"></script>
+  <script type="text/javascript" src="getdata.js"></script>
+  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+  <script>
+  
+  $(function () {
+    toList();
+
+  });
+  </script>
+
+   
+    
+</body>
+
+</html>

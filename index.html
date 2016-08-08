@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Peeranut Pongpakatien">
+
+    <title>ACEAM</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="css/plugins/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kanit&subset=thai,latin' rel='stylesheet' type='text/css'>
+
+      <link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css" />
+      <script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+      <script type="text/javascript" src="moment.js"></script>
+      <script type="text/javascript" src="daterangepicker.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Top Menu Items -->
+                <ul class="nav navbar-left top-nav">
+               <a href="index.html"><img class="navbar-nav" src="image/LIL-Logo-small.png" alt="Learning Inventions Laboratory" style="height:50px;"></a>
+               <a class="navbar-brand" href="index.html">Learning Inventions Laboratory</a>
+           </ul>
+           <ul class="nav navbar-right top-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Administrator <b class="caret"></b></a>
+            </li>
+           </ul>            
+        </nav>  
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header" >Air Conditioner Energy Audit Meter Dashboard
+                             <br> <small>Department of Computer Engineering, 4th floor of 30th-year-anniversary building, Faculty of Engineering, Chiang Mai University. </small>
+                        </h1>
+                        
+
+                       <!-- <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>  -->
+                    </div>
+                </div>
+
+        
+                <!-- /.row -->
+
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-4"> </div>
+                            <div class="col-lg-4">
+                                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                <span></span> <b class="caret"></b>
+                                </div>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+                    <div class="row">
+                    <div class="col-lg-4"> </div>
+                            <div class="col-lg-4">
+                              <center> <p>Your Date Range Picker</p></center>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">          
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Area Chart</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div id="container"></div>
+  <!-- Preloader -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+             
+             
+
+
+
+        
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+  
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.js"></script>
+    <!-- Hight chart Charts JavaScript -->
+
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/highstock.js"></script>
+  <script src="Highcharts/js/themes/lil.js"></script>
+  <script src="js/exporting.js"></script>
+  <script src="js/export-csv.js"></script>
+  <script type="text/javascript" src="script.b.js"></script>
+  
+  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+  <script>
+  
+  $(function () {
+    getTimedate();
+
+  });
+  </script>
+
+   
+    
+</body>
+
+</html>

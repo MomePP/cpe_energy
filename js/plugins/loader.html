@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- saved from url=(0094)http://www.jqueryscript.net/demo/iOS-Style-jQuery-Overlays-Notifications-Plugin-iosOverlay-js/ -->
+<html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link href="./loader_files/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>jQuery iosOverlay.js examples</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="./loader_files/bootstrap.min.css">
+<link rel="stylesheet" href="./loader_files/custom.css">
+<link rel="stylesheet" href="./loader_files/iosOverlay.css">
+<link rel="stylesheet" href="./loader_files/prettify.css">
+<script type="text/javascript" async="" src="./loader_files/ga.js"></script><script src="./loader_files/ca-pub-2783044520727903.js"></script><script src="./loader_files/modernizr-2.0.6.min.js"></script>
+<style type="text/css"></style></head>
+
+<body style="">
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/other/iOS-Style-jQuery-Overlays-Notifications-Plugin-iosOverlay-js.html">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript" src="./loader_files/show_ads.js">
+</script><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" src="./loader_files/saved_resource.html"></iframe></ins></ins></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+<div class="container">
+<h1> iosOverlay.js <small>— iOS-style overlays/notifications for the web</small></h1>
+<hr>
+<h2>Examples</h2>
+<p> The following all have a two second duration: </p>
+<p class="container">
+<button id="loading" class="btn">Loading Spinner</button>
+<button id="checkMark" class="btn">Success</button>
+<button id="cross" class="btn">Error</button>
+</p>
+<p class="spacer">&nbsp;</p>
+<p> It's possible to update a notification when it's already been added: </p>
+<p class="container">
+<button id="loadToSuccess" class="btn">Loading Then Success</button>
+</p>
+<h2>Parameters and Defaults</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th> Parameter </th>
+<th> Default Value </th>
+<th> Accepts Type </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onbeforeshow</code></td>
+<td><code>noop();</code></td>
+<td> Function </td>
+</tr>
+<tr>
+<td><code>onshow</code></td>
+<td><code>noop();</code></td>
+<td> Function </td>
+</tr>
+<tr>
+<td><code>onbeforehide</code></td>
+<td><code>noop();</code></td>
+<td> Function </td>
+</tr>
+<tr>
+<td><code>onhide</code></td>
+<td><code>noop();</code></td>
+<td> Function </td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td> null </td>
+<td> String </td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td> null </td>
+<td> String (file path) </td>
+</tr>
+<tr>
+<td><code>spinner</code></td>
+<td> null </td>
+<td> Spinner (via <a href="http://fgnass.github.com/spin.js/">Spin.js</a>) </td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td> null </td>
+<td> Number (ms) </td>
+</tr>
+</tbody>
+</table>
+<h2>Methods</h2>
+<table class="table table-striped">
+<thead>
+<tr>
+<th> Method </th>
+<th> Description/Use </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hide</code></td>
+<td> Call this to begin the hide animation.
+<pre class="prettyprint"><span class="pln">  </span><span class="com">// notification is called</span><span class="pln">
+  </span><span class="kwd">var</span><span class="pln"> notification </span><span class="pun">=</span><span class="pln"> </span><span class="pun">...;</span><span class="pln">
+
+  </span><span class="com">// something happens</span><span class="pln">
+
+  </span><span class="com">// fade out notification and destroy on complete</span><span class="pln">
+  notification</span><span class="pun">.</span><span class="pln">hide</span><span class="pun">();</span></pre></td>
+</tr>
+<tr>
+</tr><tr>
+<td><code>update</code></td>
+<td> Used to update the contents of a notification on the fly. Accepts <code>text</code> and <code>icon</code> in formats as table above denotes. Accepts one or both.
+<pre class="prettyprint"><span class="pln">  </span><span class="com">// notification is called</span><span class="pln">
+  </span><span class="kwd">var</span><span class="pln"> notification </span><span class="pun">=</span><span class="pln"> </span><span class="pun">...;</span><span class="pln">
+
+  </span><span class="com">// something happens</span><span class="pln">
+
+  </span><span class="com">// notification is updated</span><span class="pln">
+  notification</span><span class="pun">.</span><span class="pln">update</span><span class="pun">({</span><span class="pln">
+    text</span><span class="pun">:</span><span class="pln"> </span><span class="str">"Success!"</span><span class="pun">,</span><span class="pln">
+    icon</span><span class="pun">:</span><span class="pln"> </span><span class="str">"img/smiley.png"</span><span class="pln">
+  </span><span class="pun">});</span></pre></td>
+</tr>
+<tr>
+</tr></tbody>
+</table>
+<h2>Browser Support</h2>
+<ul>
+<li><strong>IE7+</strong> — Rounded corners/animation do degrade when not supported, see optional dependencies</li>
+<li><strong>Google Chrome</strong></li>
+<li><strong>Firefox</strong></li>
+<li><strong>Opera</strong></li>
+<li><strong>Desktop Safari</strong></li>
+<li><strong>Mobile Safari</strong> — iPhone &amp; iPad</li>
+</ul>
+<h2>Optional Dependencies</h2>
+<ul>
+<li><a href="http://fgnass.github.com/spin.js/" target="_blank">Spin.js</a> — Required if you want to use a spinner object.</li>
+<li><a href="http://jquery.com/" target="_blank">jQuery</a> — Required for a fallback CSS animation support.</li>
+</ul>
+<h2>Tips &amp; Tricks</h2>
+<ul>
+<li>To prevent icon flickers as they load, preload image resources.</li>
+<li>Keep <code>text</code> messages short and succinct.</li>
+</ul>
+</div>
+<footer class="container">
+<p><small> Check and Cross icons come from the <a href="http://thenounproject.com/">The Noun Project</a>, attributed under CC 3.0. </small></p>
+</footer>
+<script src="./loader_files/jquery.min.js"></script> 
+<script src="./loader_files/iosOverlay.js"></script> 
+<script src="./loader_files/spin.min.js"></script> 
+<script src="./loader_files/prettify.js"></script> 
+<script src="./loader_files/custom.js"></script> 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+<div id="techsmith-snagitchrome-extension"></div><div></div><div></div><div></div><div></div></body></html>
