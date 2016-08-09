@@ -143,7 +143,7 @@ function getTimedate() {
         unitUsedAllInRoom[1] = []
         saveData = []
         var sumValue=0;
-        for (var i = 0; i <= 20; i++) {
+        for (var i = 0; i <= 21; i++) {
             saveData.push(new Array());
             unitUsedAllInRoom[0].push(room4rdFloor[i][0])
             for (var j = 1;j<=10; j++) { 
