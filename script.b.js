@@ -18,12 +18,13 @@ var room4rdFloor = [["401","30","31","28"],
             ["411","12"],
             ["412(4th)","20"],
           ["412(1)","16"],
-            ["412(2)","14"],
+            ["412(2)","14"],//17,18
             ["412(N)","34"],
             ["413","21","23"],
             ["413(Gra)","19","24"],
+            ["414","26"]
             ["LIL","25","29"],
-            ["414(3rd)","22","29"],
+            ["415(3rd)","22","29"],
             ["SIPA","32"],
            ["422","33"], //20
             ];
@@ -142,7 +143,7 @@ function getTimedate() {
         unitUsedAllInRoom[1] = []
         saveData = []
         var sumValue=0;
-        for (var i = 0; i <= 20; i++) {
+        for (var i = 0; i <= 21; i++) {
             saveData.push(new Array());
             unitUsedAllInRoom[0].push(room4rdFloor[i][0])
             for (var j = 1;j<=10; j++) { 
