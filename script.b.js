@@ -5,29 +5,14 @@ var unitUsedAllInRoom =[[],[]];
 
 var saveData = [];
 var numAir = [];
-var room4rdFloor = [["401","30","31","28"],
-            ["402","1","3","5"],
-            ["403","4"],
-            ["404","2"],
-            ["405","6"],
-            ["406","7","9"],
-            ["407","11"],
-            ["409","8"],
-           ["410","10"],
-            ["411(4th)","13","15"],
-            ["411","12"],
-            ["412(4th)","20"],
-          ["412(1)","16"],
-            ["412(2)","14"],
-            ["412(N)","34"],
-            ["413","21","23"],
-            ["413(Gra)","19","24"],
-            ["414","26"],
-            ["LIL","25","29"],
-            ["415(3rd)","22","29"],
-            ["SIPA","32"],
-           ["422","33"], //21
-            ];
+var roomValue = [];
+
+var start = moment().subtract(30, 'days');
+var end = moment();
+
+var offsetChannel = 101;
+var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(4th)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"LIL","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
+
 createChart2 =  function () {
     
     $('#container').highcharts({
@@ -109,115 +94,179 @@ createChart2 =  function () {
         credits: {
             enabled: false
         },
-        series: [{
-            name: 'Unit',
-            data: unitUsedAllInRoom[1]
-        }]
+        series: [{name:'Unit',data:unitUsedAllInRoom[1]}]
     });
 }
 
-function convertTime(x,data){
-        var datePicker = data.toISOString();
-        var str1 = datePicker.split("T");
-        var str2 = str1[1].split(".");
-        getDatepicker[x] = str1[0]+"%20"+str2[0];
-        return getDatepicker[x];
+function convertTime(data){
+        date = moment(data).format('YYYY-MM-DD HH:mm:ss')
+        return date;
 
     }
     
 function getTimedate() {
 
-    var start = moment().subtract(30, 'days');
-    var end = moment();
+    start = getUrlParameter('start');
+    end = getUrlParameter('end');
+
+    start = (typeof start == 'string') ? moment(decodeURI(start)) : moment().subtract(30, 'days');
+    end = (typeof end == 'string') ? moment(decodeURI(end)) : moment();
+    initDatePicker();
     document.getElementById("container").innerHTML = "Please wait a moment";
-    function cb(start, end) {
+    cb(start, end);  
+   
+}
+
+function cb(start, end) {
 
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
-        convertTime(0,start._d);
-        convertTime(1,end._d);
+        console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
+        console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
         
-        
-        
+        fetchData({results : 1, end:moment(start).format('YYYY-MM-DD HH:mm:ss'), type:'unit_start'});
+        fetchData({results : 1, end:moment(end).format('YYYY-MM-DD HH:mm:ss'), type:'unit_end'});
+        return;
         //Fetch channel information
         unitUsedAllInRoom[0] = []
         unitUsedAllInRoom[1] = []
         saveData = []
         var sumValue=0;
+        // return;
         for (var i = 0; i <= 21; i++) {
             saveData.push(new Array());
             unitUsedAllInRoom[0].push(room4rdFloor[i][0])
             for (var j = 1;j<=10; j++) { 
                 if(!room4rdFloor[i][j]){continue;}
-                //saveData[i][j] = getDataValue(start._d,end._d,102+room4rdFloor[i][j]);
+                
+                lastValue = getLastValue(end._d,101+Number(room4rdFloor[i][j]))
+                firstValue = getFirstValue(start._d,101+Number(room4rdFloor[i][j]))
+                saveData[i].push(lastValue - firstValue)
+                sumValue += (lastValue - firstValue)
                 
                 
-                saveData[i].push(getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j])))
-                sumValue += getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
-                //getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
             };
-            unitUsedAllInRoom[1].push(sumValue)
+            roomValue.push({
+                    room:   room4rdFloor[i][0],
+                    value: sumValue
+                    });
             console.log(saveData)
-            console.log(unitUsedAllInRoom[1])
+            console.log(roomValue)
             sumValue = 0;
         
         };
+        roomValueSorted = _.sortBy(roomValue, 'room');
+        console.log(roomValueSorted)
         createChart2()
+        document.getElementById("timePicker").innerHTML = end;
+        
        
 
     }
-    
+
+
+function initDatePicker(){
     $('#reportrange').daterangepicker({
         startDate: start,
         endDate: end,
         ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           'Today': [moment().startOf('day'), moment()],
+           'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
            'This Month': [moment().startOf('month'), moment().endOf('month')],
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
+        timePicker: true,
+        timePicker24Hour: true,
    
 
-    }, cb);
-
-    cb(start, end);  
-   
+    }, function(start,end){
+        console.log(end)
+        setQueryParameters({start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')})
+    });
 }
 
-function convert(date) {
-    YY = 1900+date.getYear()
-    MM = 1+date.getMonth()
-    DD = date.getDate()
-    selectDate = YY+ "-" + MM + "-" + DD
-    return selectDate
-    
-}
-function getDataValue (startDate,endDate,channelID){
-    
-    var fetch_url = serverURL+channelID+'/field/'+1+'.json?&start='+ convert(startDate)+'&end='+ convert(endDate) + "%2023%3A59%3A59" + "&timezone=Asia/Bangkok"
-    var resultsWh ;
-    
-    $.ajax({
-  url: fetch_url,
-  dataType: 'json',
-  async: false,
-  
-  success: function(data) {
-    
-        
-        var record = data.feeds
-        console.log(channelID,record[record.length-1],record[0])
-        if (record[0]){
-            resultsWh = record[record.length-1].field1 - record[0].field1
-        }
-        else{
-        console.log("NoData")
-        
-    }
-    
+function setQueryParameters(params) {
+  var query = [],
+      key, value;
+
+  for(key in params) {
+    if(!params.hasOwnProperty(key)) continue;
+    value = params[key];
+    query.push(key + "=" + value);
   }
+
+  location.search = query.join("&");
+}
+
+function fetchData(option){
+    console.log("Loading...");
+    var roomCounter = 0;
+
+    $.each(roomData, function(room_index, room){
+            // console.log(room);
+            var sensorCounter = 0;
+            $.each(room.list, function(sensor_index, sensor){
+
+                option          = option || {results : 1};
+                var channelID   = offsetChannel+sensor.no;
+                var field       = option.field || 1;
+                var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
+                room.sum_unit_used = 0;
+                $.getJSON(fetch_url, function (data) {
+
+                    sensor[option.type] = (data.feeds.length > 0 ) ? Number(data.feeds[0].field1) : 0;
+                    if (option.type=='unit_end'){
+                        sensor.unit_used = (sensor.unit_end >= sensor.unit_start ) ? (sensor.unit_end - sensor.unit_start):0;
+                        room.sum_unit_used += sensor.unit_used;
+                    }
+
+                }).complete(function() { 
+                    console.log("complete");
+                    sensorCounter += 1;
+                    if (sensorCounter === room.list.length) {
+                        roomCounter += 1;
+                        if (option.type=='unit_end' && roomCounter == roomData.length) {
+                            // console.log(roomData);
+                            startSort();
+                        }
+                        
+                    } 
+                });
+
+                
+            });
+
 });
-return resultsWh
-    
+
+return;
+}
+
+function startSort(){
+
+    var sorted = _.sortBy(roomData, function(room){ return -1*room.sum_unit_used; });
+    unitUsedAllInRoom[0] = []
+    unitUsedAllInRoom[1] = []
+    for (room_index in sorted){
+        var room = sorted[room_index];
+        unitUsedAllInRoom[0].push(room.name);
+        unitUsedAllInRoom[1].push(room.sum_unit_used);
+    }    
+    createChart2()
+}
+
+function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    var datas = {};
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        datas[sParameterName[0]] = sParameterName[1];
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+    return datas;
 }
