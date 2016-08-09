@@ -5,7 +5,8 @@ var unitUsedAllInRoom =[[],[]];
 
 var saveData = [];
 var numAir = [];
-var room4rdFloor = [["401(ISNE)","30","31","28"],
+var roomValue = [];
+var room4rdFloor = [["401","30","31","28"],
             ["402","1","3","5"],
             ["403","4"],
             ["404","2"],
@@ -18,7 +19,7 @@ var room4rdFloor = [["401(ISNE)","30","31","28"],
             ["411","12"],
             ["412(4th)","20"],
           ["412(1)","16"],
-            ["412(2)","14"],//17,18
+            ["412(2)","14"],
             ["412(N)","34"],
             ["413","21","23"],
             ["413(Gra)","19","24"],
@@ -26,7 +27,7 @@ var room4rdFloor = [["401(ISNE)","30","31","28"],
             ["LIL","25","29"],
             ["415(3rd)","22","29"],
             ["SIPA","32"],
-           ["422","33"], //20
+           ["422","33"], //21
             ];
 createChart2 =  function () {
     
@@ -109,33 +110,30 @@ createChart2 =  function () {
         credits: {
             enabled: false
         },
-        series: [{
-            name: 'Unit',
-            data: unitUsedAllInRoom[1]
-        }]
+        series: [roomValue]
     });
 }
 
-function convertTime(x,data){
-        var datePicker = data.toISOString();
-        var str1 = datePicker.split("T");
-        var str2 = str1[1].split(".");
-        getDatepicker[x] = str1[0]+"%20"+str2[0];
-        return getDatepicker[x];
+function convertTime(data){
+        date = moment(data).format('YYYY-MM-DD HH:mm:ss')
+        return date;
 
     }
     
 function getTimedate() {
 
-    var start = moment().subtract(30, 'days');
-    var end = moment();
+    start = moment().subtract(30, 'days');
+    end = moment();
     document.getElementById("container").innerHTML = "Please wait a moment";
-    function cb(start, end) {
+    cb(start, end);  
+   
+}
+
+function cb(start, end) {
 
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
-        convertTime(0,start._d);
-        convertTime(1,end._d);
-        
+        console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
+        console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
         
         
         //Fetch channel information
@@ -143,32 +141,43 @@ function getTimedate() {
         unitUsedAllInRoom[1] = []
         saveData = []
         var sumValue=0;
+        // return;
         for (var i = 0; i <= 21; i++) {
             saveData.push(new Array());
             unitUsedAllInRoom[0].push(room4rdFloor[i][0])
             for (var j = 1;j<=10; j++) { 
                 if(!room4rdFloor[i][j]){continue;}
-                //saveData[i][j] = getDataValue(start._d,end._d,102+room4rdFloor[i][j]);
+                
+                lastValue = getLastValue(end._d,101+Number(room4rdFloor[i][j]))
+                firstValue = getFirstValue(start._d,101+Number(room4rdFloor[i][j]))
+                saveData[i].push(lastValue - firstValue)
+                sumValue += (lastValue - firstValue)
                 
                 
-                saveData[i].push(getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j])))
-                sumValue += getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
-                //getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
             };
-            unitUsedAllInRoom[1].push(sumValue)
+            roomValue.push({
+                    room:   room4rdFloor[i][0],
+                    value: sumValue
+                    });
             console.log(saveData)
-            console.log(unitUsedAllInRoom[1])
+            console.log(roomValue)
             sumValue = 0;
         
         };
+        roomValueSorted = _.sortBy(roomValue, 'room');
+        console.log(roomValueSorted)
         createChart2()
+        document.getElementById("timePicker").innerHTML = end;
+        
        
 
     }
-    
+
+
+$(function() {
     $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
+        startDate: moment().subtract(30, 'days'),
+        endDate: moment(),
         ranges: {
            'Today': [moment(), moment()],
            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -177,27 +186,20 @@ function getTimedate() {
            'This Month': [moment().startOf('month'), moment().endOf('month')],
            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
+        timePicker: true,
+        timePicker24Hour: true,
    
 
     }, cb);
+});
 
-    cb(start, end);  
-   
-}
 
-function convert(date) {
-    YY = 1900+date.getYear()
-    MM = 1+date.getMonth()
-    DD = date.getDate()
-    selectDate = YY+ "-" + MM + "-" + DD
-    return selectDate
+
+function getLastValue (endDate,channelID){
     
-}
-function getDataValue (startDate,endDate,channelID){
-    
-    var fetch_url = serverURL+channelID+'/field/'+1+'.json?&start='+ convert(startDate)+'&end='+ convert(endDate) + "%2023%3A59%3A59" + "&timezone=Asia/Bangkok"
+    var fetch_url = serverURL+channelID+'/field/'+1+'.json?&results=1&end='+ convertTime(endDate)+ "&timezone=Asia/Bangkok"
     var resultsWh ;
-    
+    console.log(fetch_url);
     $.ajax({
   url: fetch_url,
   dataType: 'json',
@@ -207,9 +209,38 @@ function getDataValue (startDate,endDate,channelID){
     
         
         var record = data.feeds
-        console.log(channelID,record[record.length-1],record[0])
+        console.log(channelID,record[0])
         if (record[0]){
-            resultsWh = record[record.length-1].field1 - record[0].field1
+            resultsWh = record[0].field1
+        }
+        else{
+        console.log("NoData")
+        
+    }
+    
+  }
+});
+return resultsWh
+    
+}
+
+function getFirstValue (endDate,channelID){
+    
+    var fetch_url = serverURL+channelID+'/field/'+1+'.json?&results=1&end='+ convertTime(endDate)
+    var resultsWh ;
+    console.log(fetch_url);
+    $.ajax({
+  url: fetch_url,
+  dataType: 'json',
+  async: false,
+  
+  success: function(data) {
+    
+        
+        var record = data.feeds
+        console.log(channelID,record[0])
+        if (record[0]){
+            resultsWh = record[0].field1
         }
         else{
         console.log("NoData")
