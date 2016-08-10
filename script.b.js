@@ -3,8 +3,7 @@ var getDatepicker=[];
 var valueplot = [];
 var unitUsedAllInRoom =[[],[]];
 
-var saveData = [];
-var numAir = [];
+var saveData = [{"name":"sumAllUnit","value":"0"},{"name":"avgAllUnit","value":"0"}];
 var roomValue = [];
 
 var start = moment().subtract(30, 'days');
@@ -13,11 +12,13 @@ var end = moment();
 var offsetChannel = 101;
 var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(4th)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"LIL","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
 
+
 createChart2 =  function () {
     
     $('#container').highcharts({
         chart: {
-            type: 'bar'
+            type: 'bar',
+            height: "800"
         },
          title: {
                 text: null
@@ -47,11 +48,10 @@ createChart2 =  function () {
             title: {
                 text: 'Unit (KWh)',
                 align: 'high',
-                align: "middle",
                 enabled: "middle",
-                margin: 40,
+                margin: 20,
                 offset: undefined,
-                style: { "fontSize": "22px", "fontWeight": "bold" },
+                style: { "fontSize": "18px", "fontWeight": "bold" },
             },
             labels: {
                 overflow: 'justify'
@@ -74,7 +74,10 @@ createChart2 =  function () {
             bar: {
                 dataLabels: {
                     enabled: true
-                }
+                },
+                series: {
+                pointWidth: 40//width of the column bars irrespective of the chart size
+            }
             }
         },
         legend: {
@@ -113,6 +116,7 @@ function getTimedate() {
     end = (typeof end == 'string') ? moment(decodeURI(end)) : moment();
     initDatePicker();
     document.getElementById("container").innerHTML = "Please wait a moment";
+    
     cb(start, end);  
    
 }
@@ -125,6 +129,7 @@ function cb(start, end) {
         
         fetchData({results : 1, end:moment(start).format('YYYY-MM-DD HH:mm:ss'), type:'unit_start'});
         fetchData({results : 1, end:moment(end).format('YYYY-MM-DD HH:mm:ss'), type:'unit_end'});
+
         return;
         //Fetch channel information
         unitUsedAllInRoom[0] = []
@@ -182,7 +187,11 @@ function initDatePicker(){
 
     }, function(start,end){
         console.log(end)
-        setQueryParameters({start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')})
+        setQueryParameters({start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')
+
+    })
+
+
     });
 }
 
@@ -251,10 +260,22 @@ function startSort(){
         var room = sorted[room_index];
         unitUsedAllInRoom[0].push(room.name);
         unitUsedAllInRoom[1].push(room.sum_unit_used);
-    }    
+    }     
+    calStatic()
+     document.getElementById("lastTimeUpdate").innerHTML = end.format('HH:mm:ss')
     createChart2()
 }
-
+function calStatic() {
+    sumValue = 0
+    for (var i = 0 ; i <= unitUsedAllInRoom[1].length - 1; i++) {
+      sumValue += unitUsedAllInRoom[1][i];
+    };
+    document.getElementById("Max.room").innerHTML = unitUsedAllInRoom[0][0];
+    document.getElementById("Max.value").innerHTML = (unitUsedAllInRoom[1][0]).toFixed(2);
+    document.getElementById("All.value").innerHTML = sumValue.toFixed(2) + "  (kW)" 
+    document.getElementById("Avarage.value").innerHTML = (sumValue/unitUsedAllInRoom[1].length).toFixed(2)+ "  (kW)" ;
+    
+}
 function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
