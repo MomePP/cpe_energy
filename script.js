@@ -412,7 +412,7 @@ function getDataValue (startDate,endDate,channelID){
 				data : list
 
 			}
-	
+	console.log(seriesOptions)	
   }
 });
 
