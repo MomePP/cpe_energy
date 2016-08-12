@@ -10,9 +10,17 @@ var suffix = ["Wh","V","A","Watt"]
 var getDatepicker=[];
 var valueplot = [];
 var unitUsedAllInRoom =[[],[]];
+
+var offsetChannel = 101;
 var list = []
+
 var saveData = [];
+var lastUpdate ;
 var numAir = [];
+
+var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(4th)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"LIL","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
+
+
 var room4rdFloor = [["401","30","31","28"],
             ["402","1","3","5"],
             ["403","4"],
@@ -40,8 +48,9 @@ var room4rdFloor = [["401","30","31","28"],
 
 
 var isLoading = {};
-var seriesOptions = [],
-seriesCounter = 0,
+var seriesOptions = []
+var seriesOptions2 = []
+var seriesCounter = 0
 
 // create the chart when all data is loaded
 createChart = function () {
@@ -155,7 +164,117 @@ createChart = function () {
         
 		});
 	};
+createChart2 = function () {
+	var roomID = Number(getUrlParameter("roomID"));
+	$('#container2').highcharts( 'StockChart', {
+		chart : {
+			
+			//events : {
+			//	load : function () {
+			//		var series2 = this.series.slice(0,this.series.length-1);
+					//handleLoaded(series2);
+			//	}
+			//}
+		},
+		
+		title: {
+			text: params.roomID ,
+			style: {
+				color: '#2c3e50',
+				fontSize: '36px'	
+			}
+		},
+		rangeSelector: {
+			buttons: [
+				{
+					type: 'minute',
+					count: 5,
+					text: '5min'
+				},
+				{
+					type: 'hour',
+					count: 1,
+					text: '1hr'
+				},
+				{
+					type: 'day',
+					count: 1,
+					text: '1d'
+				},
+				{
+					type: 'week',
+					count: 1,
+					text: '1w'
+				},
+				{
+					type: 'month',
+					count: 1,
+					text: '1m'
+				}, {
+					type: 'ytd',
+					text: 'YTD'
+				}, {
+					type: 'year',
+					count: 1,
+					text: '1y'
+				}, {
+					type: 'all',
+					text: 'All'
+				}]
+			},
 
+			yAxis: {
+            	
+            	plotLines: [{
+                	value: 0,
+                	width: 2,
+                	color: 'white'
+            	}]
+        	},
+			
+
+			// legend: {
+			// 	enabled: true,
+			// 	layout: 'horizontal',
+			// 	align: 'bottom',
+			// 	borderWidth: 0
+			// },
+			legend: {
+				enabled: true,
+				layout: 'vertical',
+				align: 'left',
+				verticalAlign: "top",
+				floating: true,
+				y: 240
+			},
+			
+
+			// plotOptions: {
+			// 	// series: {
+			// 	//     compare: 'percent'
+			// 	// }
+			// 	enabled: true
+
+			// },
+
+			 plotOptions: {
+   //          	line: {
+   //              	dataLabels: {
+   //               	   enabled: false
+   //              	},
+   //              	enableMouseTracking: true
+   //          	}
+   				bar: {
+					dataLabels: {
+						enabled: true
+					}
+				}
+         	},
+
+			series:  seriesOptions2
+        
+		});
+	};
 
 
 	var updateChannelShow = function(data){
@@ -173,64 +292,7 @@ createChart = function () {
 
 	}
 
-	function initData(object){
-		console.log("Loading...");
-
-		$.each(channel.list, function (i, name) {
-			
-			var option = config;//{results : config.results, api_key : params.api_key}
-				var fetch_url = serverURL+params.channelID+'/field/'+name+'.json?'+$.param(option)+'&start='+getDatepicker[0]+'&end='+getDatepicker[1];
-				var gogo = "https://data.learninginventions.org/channels/"+params.channelID+"/field/1.json?results=&dynamic=true&"+'&start='+getDatepicker[0]+'&end='+getDatepicker[1]
-		
-		
-
-			$.getJSON(fetch_url,    function (data) {
-
-				var list = []
-				var datamonth = []
-				var parsedData
-				var g=0;
-				if (data.feeds){
-					$.each(data.feeds, function (index, record) {
-						if(record[fieldTxt+name]){
-							parsedData = parseDataLog({ datetime:record.created_at,value:record[fieldTxt+name] });
-							list.push( [parsedData.datetime, parsedData.value ] )
-							valueplot[i] = parsedData.value.toFixed(2);
-							
-						}
-					});
-					
-				}
-
-				
-				// Store last upadted
-				channel.data[name].last_entry_id = data.channel.last_entry_id
-				channel.data[name].updated_at = data.channel.updated_at;
-				channel.updated_at = data.channel.updated_at;
-				isLoading[name] =  false;
-
-				seriesOptions[i] = {
-					name: channel.data[name].name,
-					data: list,
-					type: ( validTypes.indexOf(channel.data[name].type) > -1  ? channel.data[name].type : 'line' ),
-					step: channel.data[name].type=="step" ? 'left' : false ,
-					tooltip: {valueSuffix: " " + suffix[i]}
-				};
-
-				// As we're loading the data asynchronously, we don't know what order it will arrive. So
-				// we keep a counter and create the chart when all the data is loaded.
-				seriesCounter += 1;
-
-				if (seriesCounter === channel.names.length) {
-					createChart();
-					plotRealTime(valueplot);
-				}
-
-			});
-		});
 	
-		return  
-	}
 
 	function getUrlParameter(sParam) {
 		var sPageURL = window.location.search.substring(1);
@@ -287,134 +349,147 @@ createChart = function () {
 
 	}
 	
-function convertTime(x,data){
-		var datePicker = data.toISOString();
-		var str1 = datePicker.split("T");
-		var str2 = str1[1].split(".");
-		getDatepicker[x] = str1[0]+"%20"+str2[0];
-		return getDatepicker[x];
 
-	}
 	
-function getTimedate() {
 
-    var start = moment().subtract(30, 'days');
-    var end = moment();
-    
-    function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
-        convertTime(0,start._d);
-        convertTime(1,end._d);
-        
-        channelKey = 0;
-        params = getUrlParameter();
-    	validateParams();
-    	//Fetch channel information
-    	//getChannelInfo(updateChannelShow);
-    	//for (var i = 0; i <= 20; i++) {
-    	//	break;
-    	//if(room4rdFloor[i][0] == params.roomID)  {
-    	//	continue;
-    	//	console.log('start')
-    	//	console.log(room4rdFloor[i],params.roomID)
-    	//	console.log(getDataValue(start._d,end._d,101+Number(room4rdFloor[i][1])))
-    	//	getDataValue(start._d,end._d,101+Number(room4rdFloor[i][1]))
-    		
+function fetchData(option){
+    console.log("Loading...");
+    var roomCounter = 0;
+     list1 = [];
+                 list3 = [];
+    $.each(roomData, function(room_index, room){
+            if (room.name!=params.roomID){return;}
+            	console.log(room.name)
+            	console.log(room.list)
+            var sensorCounter = 0;
+            $.each(room.list, function(sensor_index, sensor){
+            	 list= [];
+                
+                var channelID   = offsetChannel+sensor.no;
+                var nameOfSeries = sensor.no
+                var field       = option.field ;
+                var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
+                console.log(fetch_url)
+                
+                $.getJSON(fetch_url, function (data) {
+                   
+				
+				list = [];
+				for (var index in data.feeds){
+				var record = data.feeds[index]	
+				parsedData = parseDataLog({ datetime:record.created_at,value:record["field"+field]});
+				list.push( [parsedData.datetime, parsedData.value ] )
+				lastUpdate = record.created_at
+				
+						
+				}
+					 if (field == 1) {
+					seriesOptions[sensor_index] ={
+								name : nameOfSeries,
+							data : list}
+                    	}
+						 if (field == 3) {		
+					seriesOptions2[sensor_index] ={
+							name : nameOfSeries,
+								data : list}
+						}
+    				
+    					
+								
+						
+						
+									
+					
 
-    	//} 
-  //  }
-    		
-    	for (var i = 0; i <= 20; i++) {
-    		if(room4rdFloor[i][0] != params.roomID){continue;}
-    		for (var j = 1;j<=10; j++) { 
-    			if(!room4rdFloor[i][j]){continue;}
-    			//saveData[i][j] = getDataValue(start._d,end._d,102+room4rdFloor[i][j]);
-    			console.log('start')
-    			console.log(room4rdFloor[i],params.roomID,i,j,channelKey)
-    			getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
-    			channelKey++
-    			//getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
-    		};
-    		
-    		createChart();
-    		document.getElementById("RoomIdHtml").innerHTML = params.roomID;
-    	};
-    	
+                }).complete(function() { 
+                    console.log("complete");
+                    sensorCounter += 1;
+                    if (sensorCounter === room.list.length&&field == 1) {
+                        roomCounter += 1;
+                       
+                            // console.log(roomData);
+                            createChart();
+                        
+                        
+                    } 
+                    if (sensorCounter === room.list.length&&field == 3) {
+                        roomCounter += 1;
+                       
+                            // console.log(roomData);
+                           createChart2();
+                        
+                        
+                    } 
+                  	
+					
+                });  
+					
+              
+            });
+		
 
-
-    }
-
-    $('#reportrange').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-           'Today': [moment(), moment()],
-           'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-           'This Month': [moment().startOf('month'), moment().endOf('month')],
-           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        },
-   
-
-    }, cb);
-
-    cb(start, end);  
-
+});
+console.log(seriesOptions[0])
+return list1,list3;
 }
-
-function convert(date) {
-	YY = 1900+date.getYear()
-	MM = 1+date.getMonth()
-	DD = date.getDate()
-	selectDate = YY+ "-" + MM + "-" + DD
-	return selectDate
+function getDataValue (field,startDate,endDate,channelID){
 	
-}
-function getDataValue (startDate,endDate,channelID){
-	
-	var fetch_url = serverURL+channelID+'/field/'+1+'.json?&start='+ convert(startDate)+'&end='+ convert(endDate) + "%2023%3A59%3A59" + "&timezone=Asia/Bangkok"
-	
-	nameOfSeries = String(channelID-101)
+	var fetch_url = serverURL+channelID+'/field/'+field+'.json?&start='+ startDate+'&end='+ endDate ;	
+	nameOfSeries = String(channelID-101);
 	var parsedData
 	list = [];
-
-
 	$.ajax({
   url: fetch_url,
   dataType: 'json',
   async: false,
-  
+  error: function(){
+            return true;
+        },
   success: function(data) {
-    	console.log(data.feeds)	
+    	
 
    
 					
 		for (var index in data.feeds){
-			var record = data.feeds[index]
-			//console.log(channelID,record)
+				var record = data.feeds[index]	
+				parsedData = parseDataLog({ datetime:record.created_at,value:record.field1});
+				list.push( [parsedData.datetime, parsedData.value ] )
+				lastUpdate = record.created_at
 			
-			
-			parsedData = parseDataLog({ datetime:record.created_at,value:record.field1});
-			//console.log(parsedData)
-			list.push( [parsedData.datetime, parsedData.value ] )
-			//valueplot[i] = parsedData.value.toFixed(2);
-			
-			
-
-		
-		
-		
 	
-}
-	seriesOptions[channelKey] ={
-				name : nameOfSeries,
-				data : list
-
-			}
+									}
+		if(field == 3){
+			list = [];
+			for (var index in data.feeds){
+				var record = data.feeds[index]	
+				parsedData = parseDataLog({ datetime:record.created_at,value:record.field3});
+				list.push( [parsedData.datetime, parsedData.value ] )
+				lastUpdate = record.created_at
+			
 	
-  }
-});
+									}
+								seriesOptions2[channelKey] ={
+								name : nameOfSeries,
+								data : list
+
+											}
+						return;
+
+
+
+		}
+									
+					seriesOptions[channelKey] ={
+								name : nameOfSeries,
+								data : list
+
+											}
+	
+	  },
+	  complete: function () {
+	  	console.log("complete")
+	  }
+	});
 
 
 return list
@@ -468,5 +543,83 @@ return list
 
 	}
 
+function getTimedate() {
 
+    start = getUrlParameter('start');
+    end = getUrlParameter('end');
+
+    start = (typeof start == 'string') ? moment(decodeURI(start)) : moment().subtract(30, 'days');
+    end = (typeof end == 'string') ? moment(decodeURI(end)) : moment();
+    initDatePicker();
+    document.getElementById("container").innerHTML = "Please wait a moment";
+    
+    cb(start, end);  
+   
+}
+
+function cb(start, end) {
+
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
+        console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
+        console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
+       
+       	channelKey =0
+        params = getUrlParameter();
+    	validateParams();
+
+    	
+    			//saveData[i][j] = getDataValue(start._d,end._d,102+room4rdFloor[i][j]);
+    			
+    			//getDataValue(3,,101+Number(room4rdFloor[i][j]))
+    		fetchData({field: 1 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
+    		fetchData({field: 3 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
+    			
+    			//getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
+    		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
+    		document.getElementById("RoomIdHtml").innerHTML = params.roomID;
+    	
+        return;
+        //Fetch channel information
+
+    }
+
+
+function initDatePicker(){
+    $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'Today': [moment().startOf('day'), moment()],
+           'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+           'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+           'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+           'This Month': [moment().startOf('month'), moment().endOf('month')],
+           'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        timePicker: true,
+        timePicker24Hour: true,
+   
+
+    }, function(start,end){
+        console.log(end)
+        setQueryParameters({roomID:params.roomID,start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')
+
+    })
+
+
+    });
+}
+
+function setQueryParameters(params) {
+  var query = [],
+      key, value;
+
+  for(key in params) {
+    if(!params.hasOwnProperty(key)) continue;
+    value = params[key];
+    query.push(key + "=" + value);
+  }
+
+  location.search = query.join("&");
+}
 

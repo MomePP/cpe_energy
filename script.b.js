@@ -5,7 +5,7 @@ var unitUsedAllInRoom =[[],[]];
 
 var saveData = [{"name":"sumAllUnit","value":"0"},{"name":"avgAllUnit","value":"0"}];
 var roomValue = [];
-
+var lastUpdate = 0;
 var start = moment().subtract(30, 'days');
 var end = moment();
 
@@ -132,39 +132,6 @@ function cb(start, end) {
 
         return;
         //Fetch channel information
-        unitUsedAllInRoom[0] = []
-        unitUsedAllInRoom[1] = []
-        saveData = []
-        var sumValue=0;
-        // return;
-        for (var i = 0; i <= 21; i++) {
-            saveData.push(new Array());
-            unitUsedAllInRoom[0].push(room4rdFloor[i][0])
-            for (var j = 1;j<=10; j++) { 
-                if(!room4rdFloor[i][j]){continue;}
-                
-                lastValue = getLastValue(end._d,101+Number(room4rdFloor[i][j]))
-                firstValue = getFirstValue(start._d,101+Number(room4rdFloor[i][j]))
-                saveData[i].push(lastValue - firstValue)
-                sumValue += (lastValue - firstValue)
-                
-                
-            };
-            roomValue.push({
-                    room:   room4rdFloor[i][0],
-                    value: sumValue
-                    });
-            console.log(saveData)
-            console.log(roomValue)
-            sumValue = 0;
-        
-        };
-        roomValueSorted = _.sortBy(roomValue, 'room');
-        console.log(roomValueSorted)
-        createChart2()
-        document.getElementById("timePicker").innerHTML = end;
-        
-       
 
     }
 
@@ -213,7 +180,7 @@ function fetchData(option){
     var roomCounter = 0;
 
     $.each(roomData, function(room_index, room){
-            // console.log(room);
+            console.log(room);
             var sensorCounter = 0;
             $.each(room.list, function(sensor_index, sensor){
 
@@ -223,6 +190,9 @@ function fetchData(option){
                 var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
                 room.sum_unit_used = 0;
                 $.getJSON(fetch_url, function (data) {
+                    
+            
+                    
 
                     sensor[option.type] = (data.feeds.length > 0 ) ? Number(data.feeds[0].field1) : 0;
                     if (option.type=='unit_end'){
@@ -262,7 +232,7 @@ function startSort(){
         unitUsedAllInRoom[1].push(room.sum_unit_used);
     }     
     calStatic()
-     document.getElementById("lastTimeUpdate").innerHTML = end.format('HH:mm:ss')
+    document.getElementById("lastTimeUpdate").innerHTML = end.format('YYYY-MM-DD HH:mm:ss');
     createChart2()
 }
 function calStatic() {
@@ -276,6 +246,14 @@ function calStatic() {
     document.getElementById("Avarage.value").innerHTML = (sumValue/unitUsedAllInRoom[1].length).toFixed(2)+ "  (kW)" ;
     
 }
+function parseDataLog(data){
+        var date = new Date(data.datetime);
+        var localdate = date-1*date.getTimezoneOffset()*60*1000;
+        data.datetime = localdate;
+        data.value    = Number(data.value);
+        return data;
+    }
+
 function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
