@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Peeranut Pongpakatien">
 
-    <title>ACEAM</title>
+    <title>Power Usage</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -110,8 +110,28 @@
                 <div class="row">
                     
             
-                    <div class="col-lg-2"><br>
                     
+                    
+                    <!--    <h1 class="page-header"><p id="RoomIdHtml" align = "middle"> Room</p> </h1>-->
+                    <div class="col-lg-12"><center>
+                        <h1 class="page-header" >A/C Power Usage
+                             <br> <small>Floor#4. Department of Computer Engineering </small>
+                        </h1></center>
+                        
+
+                       <!-- <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Dashboard
+                            </li>
+                        </ol>  -->
+                    </div>
+                   
+                </div>
+
+        
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-4"> 
                     <div class="dropdown">
                     <button onclick="myFunction()" class="dropbtn" id="RoomIdHtml">DropdownRoom</button>
                     <h4 >Click to choose Room</h4>
@@ -140,30 +160,13 @@
                         <a href="meter.html?&roomID=SIPA"> Room : SIPA</a>
                         <a href="meter.html?&roomID=422"> Room : 422</a>
 
-                      </div>
+                     </div>
+
                        </div>
                     </div>
-                    <!--    <h1 class="page-header"><p id="RoomIdHtml" align = "middle"> Room</p> </h1>-->
-                    <div class="col-lg-10"><center>
-                        <h1 class="page-header" >Air Conditioner Energy Audit Meter Dashboard
-                             <br> <small>Department of Computer Engineering, 4th floor of 30th-year-anniversary building<br> Faculty of Engineering, Chiang Mai University. </small>
-                        </h1></center>
-                        
-
-                       <!-- <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-dashboard"></i> Dashboard
-                            </li>
-                        </ol>  -->
-                    </div>
-                   
-                </div>
-
-        
-                <!-- /.row -->
-                <div class="row">
-                    <div class="col-lg-4"> </div>
+                    
                             <div class="col-lg-4">
+                                <br>
                                 <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
                                 <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
                                 <span></span> <b class="caret"></b>
@@ -174,7 +177,7 @@
                      <div class="row">
                     
                             
-                              <center> <p>Last time update :</p> <span id="lastTimeUpdate"></span></center>
+                              <center> <p>Chart Date :</p> <span id="lastTimeUpdate"></span></center>
                            </div>
                 <div class="row">
                   <div class="col-lg-12">
@@ -188,7 +191,7 @@
                             <div class="panel-heading">
                                 <div class="row">
                                  <div class="col-xs-5 text-center"> 
-                                        <div class="huge" >Sum Unit Used</div>
+                                        <div class="huge" >Total units</div>
                                     </div>
                                     <div class="col-xs-7 text-right">
                                         <div  id="Unit.time"  >Time</div>
@@ -206,7 +209,7 @@
                                 <div class="row">
                                   <div class="col-xs-5 text-center">
                                       
-                                        <div class="huge" >Max A/C Used</div>
+                                        <div class="huge" >Peak units</div>
                                     </div>
                                     <div class="col-xs-7 text-right">
                                         <div class="huge" id="Max.no"  >NO</div>
@@ -224,7 +227,7 @@
                                 <div class="row">
                                   <div class="col-xs-5 text-center">
                                       
-                                        <div class="huge" >Peak Current</div>
+                                        <div class="huge" >Peak current</div>
                                     </div>
                                     <div class="col-xs-7 text-right">
                                         <div  id="peak.time"  >Time</div>

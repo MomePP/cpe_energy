@@ -382,7 +382,7 @@ function fetchData(option){
 				for (var index in data.feeds){
 				var record = data.feeds[index]	
 				parsedData = parseDataLog({ datetime:record.created_at,value:record["field"+field]});
-				list.push( [parsedData.datetime, parsedData.value ] )
+				list.push( [parsedData.datetime, parsedData.value] )
 				lastUpdate = record.created_at
 				
 						
@@ -646,8 +646,8 @@ function cb(start, end) {
     			
     			//getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
     		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-    		document.getElementById("RoomIdHtml").innerHTML = "Room  :"+  params.roomID;
-    		document.title = "ACEAM - " + params.roomID;
+    		document.getElementById("RoomIdHtml").innerHTML = "Room  : "+  params.roomID;
+    		document.title = params.roomID   + " - Power Usage ";
         return;
         //Fetch channel information
 
