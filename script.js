@@ -390,7 +390,6 @@ function fetchData(option){
 				var record = data.feeds[index]	
 				parsedData = parseDataLog({ datetime:record.created_at,value:record["field"+field]});
 				list.push( [parsedData.datetime, parseFloat((parsedData.value).toFixed(2))] )
-				console.log(parseFloat((parsedData.value).toFixed(2)))
 				lastUpdate = record.created_at
 				
 						

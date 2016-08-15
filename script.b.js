@@ -32,6 +32,7 @@ createChart2 =  function () {
                     },
                     useHTML: true
                     },
+
             title: {
                 text: null
 
