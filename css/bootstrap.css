@@ -1424,6 +1424,16 @@ ul ol,
 ol ol {
   margin-bottom: 0;
 }
+.footer {
+  position: absolute;
+  bottom: 1000;
+  width: 100%;
+      color: #fff;
+  /* Set the fixed height of the footer here
+  height: 80px; */
+  background-color: #3498db;
+  border-color: #2980b9;
+}
 .list-unstyled {
   padding-left: 0;
   list-style: none;
