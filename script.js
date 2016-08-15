@@ -1,6 +1,6 @@
 var serverURL = "https://data.learninginventions.org/channels/";
 
-var config = { results:1000, dynamic:false };
+var config = { results:1000, dynamic:true };
 
 var fieldTxt = "field";
 var params	= {};
