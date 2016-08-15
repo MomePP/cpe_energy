@@ -24,7 +24,7 @@ var lastEntry = [];
 var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(LD)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"415(LIL)","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
 
 
-var room4rdFloor = [["401","30","31","28"],
+var room4rdFloor = [["401","28","30","31"],
             ["402","1","3","5"],
             ["403","4"],
             ["404","2"],
@@ -34,8 +34,8 @@ var room4rdFloor = [["401","30","31","28"],
             ["409","8"],
            ["410","10"],
             ["411(LD)","13","15"],
-            ["411","12"],  //**
-            ["412(4th)","20"],
+            ["411","12,17"],  //**
+            ["412(4th)","18","20"],
           ["412(1)","16"],
             ["412(2)","14"],
             ["412(N)","34"],
@@ -70,118 +70,7 @@ createChart = function () {
 		},
 		
 		title: {
-			text: params.roomID ,
-			style: {
-				color: '#2c3e50',
-				fontSize: '36px'	
-			}
-		},
-		rangeSeletor: {
-			buttons: [
-				{
-					type: 'minute',
-					count: 5,
-					text: '5min'
-				},
-				{
-					type: 'hour',
-					count: 1,
-					text: '1hr'
-				},
-				{
-					type: 'day',
-					count: 1,
-					text: '1d'
-				},
-				{
-					type: 'week',
-					count: 1,
-					text: '1w'
-				},
-				{
-					type: 'month',
-					count: 1,
-					text: '1m'
-				}, {
-					type: 'ytd',
-					text: 'YTD'
-				}, {
-					type: 'year',
-					count: 1,
-					text: '1y'
-				}, {
-					type: 'all',
-					text: 'All'
-				}]
-			},
-
-			yAxis: {
-            	
-            	plotLines: [{
-                	value: 0,
-                	width: 2,
-                	color: 'white'
-            	}]
-        	},
-			
-
-			// legend: {
-			// 	enabled: true,
-			// 	layout: 'horizontal',
-			// 	align: 'bottom',
-			// 	borderWidth: 0
-			// },
-			legend: {
-				enabled: true,
-				layout: 'vertical',
-				align: 'left',
-				verticalAlign: 'top',
-				floating: true,
-				y: 240
-			},
-			
-
-			// plotOptions: {
-			// 	// series: {
-			// 	//     compare: 'percent'
-			// 	// }
-			// 	enabled: true
-
-			// },
-
-			 plotOptions: {
-   //          	line: {
-   //              	dataLabels: {
-   //               	   enabled: false
-   //              	},
-   //              	enableMouseTracking: true
-   //          	}
-   				bar: {
-					dataLabels: {
-						enabled: true
-					}
-				}
-         	},
-
-			series:  seriesOptions
-        
-		});
-	};
-createChart2 = function () {
-	var roomID = Number(getUrlParameter("roomID"));
-	$('#container2').highcharts( 'StockChart', {
-		chart : {
-			
-			//events : {
-			//	load : function () {
-			//		var series2 = this.series.slice(0,this.series.length-1);
-					//handleLoaded(series2);
-			//	}
-			//}
-		},
-		
-		title: {
-			text: params.roomID ,
+			text: params.roomID +" - UNIT"  ,
 			style: {
 				color: '#2c3e50',
 				fontSize: '36px'	
@@ -191,8 +80,8 @@ createChart2 = function () {
 			buttons: [
 				{
 					type: 'minute',
-					count: 5,
-					text: '5min'
+					count: 30,
+					text: '30min'
 				},
 				{
 					type: 'hour',
@@ -248,8 +137,126 @@ createChart2 = function () {
 				align: 'left',
 				verticalAlign: "top",
 				floating: true,
-				y: 240
+				y: 0
 			},
+			    tooltip: {
+        valueDecimals: 2,
+    },
+			
+
+			// plotOptions: {
+			// 	// series: {
+			// 	//     compare: 'percent'
+			// 	// }
+			// 	enabled: true
+
+			// },
+
+			 plotOptions: {
+   //          	line: {
+   //              	dataLabels: {
+   //               	   enabled: false
+   //              	},
+   //              	enableMouseTracking: true
+   //          	}
+   				bar: {
+					dataLabels: {
+						enabled: true
+					}
+				}
+         	},
+
+			series:  seriesOptions
+        
+		});
+	};
+createChart2 = function () {
+	var roomID = Number(getUrlParameter("roomID"));
+	$('#container2').highcharts( 'StockChart', {
+		chart : {
+			
+			//events : {
+			//	load : function () {
+			//		var series2 = this.series.slice(0,this.series.length-1);
+					//handleLoaded(series2);
+			//	}
+			//}
+		},
+		
+		title: {
+			text: params.roomID +" - CURRENT"  ,
+			style: {
+				color: '#2c3e50',
+				fontSize: '36px'	
+			}
+		},
+		rangeSelector: {
+			buttons: [
+				{
+					type: 'minute',
+					count: 30,
+					text: '30min'
+				},
+				{
+					type: 'hour',
+					count: 1,
+					text: '1hr'
+				},
+				{
+					type: 'day',
+					count: 1,
+					text: '1d'
+				},
+				{
+					type: 'week',
+					count: 1,
+					text: '1w'
+				},
+				{
+					type: 'month',
+					count: 1,
+					text: '1m'
+				}, {
+					type: 'ytd',
+					text: 'YTD'
+				}, {
+					type: 'year',
+					count: 1,
+					text: '1y'
+				}, {
+					type: 'all',
+					text: 'All'
+				}]
+			},
+
+			yAxis: {
+            	
+            	plotLines: [{
+                	value: 0,
+                	width: 2,
+                	color: 'white'
+            	}]
+        	},
+			
+
+			// legend: {
+			// 	enabled: true,
+			// 	layout: 'horizontal',
+			// 	align: 'bottom',
+			// 	borderWidth: 0
+			// },
+			legend: {
+				enabled: true,
+				layout: 'vertical',
+				align: 'left',
+				verticalAlign: "top",
+				floating: true,
+				y: 0
+			},
+			tooltip: {
+        valueDecimals: 2,
+   			 },
+			
 			
 
 			// plotOptions: {
@@ -369,7 +376,7 @@ function fetchData(option){
             	 list= [];
                 
                 var channelID   = offsetChannel+sensor.no;
-                var nameOfSeries = sensor.no
+                var nameOfSeries = "A/C No. "+sensor.no
                 var field       = option.field ;
                 var maxValue = 0;
                 var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
@@ -382,7 +389,8 @@ function fetchData(option){
 				for (var index in data.feeds){
 				var record = data.feeds[index]	
 				parsedData = parseDataLog({ datetime:record.created_at,value:record["field"+field]});
-				list.push( [parsedData.datetime, parsedData.value] )
+				list.push( [parsedData.datetime, parseFloat((parsedData.value).toFixed(2))] )
+				console.log(parseFloat((parsedData.value).toFixed(2)))
 				lastUpdate = record.created_at
 				
 						
@@ -429,7 +437,7 @@ function fetchData(option){
                            	};
                            	
                            
-                            document.getElementById("Max.value").innerHTML = maxValue.toFixed(2)+ " kW";
+                            document.getElementById("Max.value").innerHTML = maxValue.toFixed(2)+ " kWh";
 							document.getElementById("Max.no").innerHTML = "No. " + maxNo;
                             
                         
@@ -483,7 +491,7 @@ function calStat (datain) {
 		};
 		document.getElementById("peak.value").innerHTML = max.toFixed(2) + " A";
 		document.getElementById("peak.time").innerHTML = timemax;
-		document.getElementById("peak.no").innerHTML = "No. " + sensor;
+		document.getElementById("peak.no").innerHTML = sensor;
 	
 	}
 function lastStat (data) {
@@ -498,82 +506,15 @@ function lastStat (data) {
 		lastUnitEntry = sumValue
 		
 
-		document.getElementById("Unit.value").innerHTML = lastUnitEntry.toFixed(2)+ " kW";
+		document.getElementById("Unit.value").innerHTML = lastUnitEntry.toFixed(2)+ " kWh";
 		document.getElementById("Unit.time").innerHTML = lastUnitEntryDate;
 }
 
-function getDataValue (field,startDate,endDate,channelID){
-	
-	var fetch_url = serverURL+channelID+'/field/'+field+'.json?&start='+ startDate+'&end='+ endDate ;	
-	nameOfSeries = String(channelID-101);
-	var parsedData
-	list = [];
-	$.ajax({
-  url: fetch_url,
-  dataType: 'json',
-  async: false,
-  error: function(){
-            return true;
-        },
-  success: function(data) {
-    	
-
-   
-					
-		for (var index in data.feeds){
-				var record = data.feeds[index]	
-				parsedData = parseDataLog({ datetime:record.created_at,value:record.field1});
-				list.push( [parsedData.datetime, parsedData.value ] )
-				lastUpdate = record.created_at
-			
-	
-									}
-		if(field == 3){
-			list = [];
-			for (var index in data.feeds){
-				var record = data.feeds[index]	
-				parsedData = parseDataLog({ datetime:record.created_at,value:record.field3});
-				list.push( [parsedData.datetime, parsedData.value ] )
-				lastUpdate = record.created_at
-			
-	
-									}
-								seriesOptions2[channelKey] ={
-								name : nameOfSeries,
-								data : list
-
-											}
-						return;
-
-
-
-		}
-									
-					seriesOptions[channelKey] ={
-								name : nameOfSeries,
-								data : list
-
-											}
-	
-	  },
-	  complete: function () {
-	  	console.log("complete")
-	  }
-	});
-
-
-return list
-	
-}
 
 
 
 
 	function handleLoaded(series){
-
-		if (!config.dynamic) {
-			return;
-		}
 
 		// push data every 5 seconds
 		setInterval(function() {

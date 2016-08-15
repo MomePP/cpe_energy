@@ -32,6 +32,7 @@ createChart2 =  function () {
                     },
                     useHTML: true
                     },
+
             title: {
                 text: null
 
@@ -45,10 +46,11 @@ createChart2 =  function () {
                     color: 'white'
                 }],
             min: 0,
+             opposite:true,
             title: {
                 text: 'Unit (KWh)',
-                align: 'high',
-                enabled: "middle",
+                align: 'low',
+                enabled: "bottom",
                 margin: 20,
                 offset: undefined,
                 style: { "fontSize": "18px", "fontWeight": "bold" },
@@ -242,8 +244,8 @@ function calStatic() {
     };
     document.getElementById("Max.room").innerHTML = unitUsedAllInRoom[0][0];
     document.getElementById("Max.value").innerHTML = (unitUsedAllInRoom[1][0]).toFixed(2);
-    document.getElementById("All.value").innerHTML = sumValue.toFixed(2) + "  (kW)" 
-    document.getElementById("Avarage.value").innerHTML = (sumValue/unitUsedAllInRoom[1].length).toFixed(2)+ "  (kW)" ;
+    document.getElementById("All.value").innerHTML = sumValue.toFixed(2) + "  (kWh)" 
+    document.getElementById("Avarage.value").innerHTML = (sumValue/unitUsedAllInRoom[1].length).toFixed(2)+ "  (kWh)" ;
     
 }
 function parseDataLog(data){
