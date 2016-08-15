@@ -45,10 +45,11 @@ createChart2 =  function () {
                     color: 'white'
                 }],
             min: 0,
+             opposite:true,
             title: {
                 text: 'Unit (KWh)',
-                align: 'high',
-                enabled: "middle",
+                align: 'low',
+                enabled: "bottom",
                 margin: 20,
                 offset: undefined,
                 style: { "fontSize": "18px", "fontWeight": "bold" },
