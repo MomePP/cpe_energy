@@ -13,12 +13,15 @@ var unitUsedAllInRoom =[[],[]];
 
 var offsetChannel = 101;
 var list = []
-
+var max,timemax;
 var saveData = [];
 var lastUpdate ;
 var numAir = [];
-
-var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(4th)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"LIL","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
+var nameOfSeries ;
+var max = 0;
+var maxNo = 0;
+var lastEntry = [];
+var roomData = [{"name":"401","list":[{"no":30},{"no":31},{"no":28}],"sum_unit_used":0},{"name":"402","list":[{"no":1},{"no":3},{"no":5}],"sum_unit_used":0},{"name":"403","list":[{"no":4}],"sum_unit_used":0},{"name":"404","list":[{"no":2}],"sum_unit_used":0},{"name":"405","list":[{"no":6}],"sum_unit_used":0},{"name":"406","list":[{"no":7},{"no":9}],"sum_unit_used":0},{"name":"407","list":[{"no":11}],"sum_unit_used":0},{"name":"409","list":[{"no":8}],"sum_unit_used":0},{"name":"410","list":[{"no":10}],"sum_unit_used":0},{"name":"411(LD)","list":[{"no":13},{"no":15}],"sum_unit_used":0},{"name":"411","list":[{"no":12}],"sum_unit_used":0},{"name":"412(4th)","list":[{"no":20}],"sum_unit_used":0},{"name":"412(1)","list":[{"no":16}],"sum_unit_used":0},{"name":"412(2)","list":[{"no":14}],"sum_unit_used":0},{"name":"412(N)","list":[{"no":34}],"sum_unit_used":0},{"name":"413","list":[{"no":21},{"no":23}],"sum_unit_used":0},{"name":"413(Gra)","list":[{"no":19},{"no":24}],"sum_unit_used":0},{"name":"414","list":[{"no":26}],"sum_unit_used":0},{"name":"415(LIL)","list":[{"no":25},{"no":29}],"sum_unit_used":0},{"name":"415(3rd)","list":[{"no":22},{"no":29}],"sum_unit_used":0},{"name":"SIPA","list":[{"no":32}],"sum_unit_used":0},{"name":"422","list":[{"no":33}],"sum_unit_used":0}];
 
 
 var room4rdFloor = [["401","30","31","28"],
@@ -30,7 +33,7 @@ var room4rdFloor = [["401","30","31","28"],
             ["407","11"],  //**
             ["409","8"],
            ["410","10"],
-            ["411(4th)","13","15"],
+            ["411(LD)","13","15"],
             ["411","12"],  //**
             ["412(4th)","20"],
           ["412(1)","16"],
@@ -39,7 +42,7 @@ var room4rdFloor = [["401","30","31","28"],
             ["413","21","23"],
             ["413(Gra)","19","24"],
             ["414","26"],
-            ["LIL","25","29"],
+            ["415(LIL)","25","29"],
             ["415(3rd)","22","29"],
             ["SIPA","32"],
            ["422","33"], //21
@@ -73,7 +76,7 @@ createChart = function () {
 				fontSize: '36px'	
 			}
 		},
-		rangeSelector: {
+		rangeSeletor: {
 			buttons: [
 				{
 					type: 'minute',
@@ -355,19 +358,20 @@ createChart2 = function () {
 function fetchData(option){
     console.log("Loading...");
     var roomCounter = 0;
-     list1 = [];
-                 list3 = [];
+
     $.each(roomData, function(room_index, room){
             if (room.name!=params.roomID){return;}
             	console.log(room.name)
             	console.log(room.list)
             var sensorCounter = 0;
+            var parsedData
             $.each(room.list, function(sensor_index, sensor){
             	 list= [];
                 
                 var channelID   = offsetChannel+sensor.no;
                 var nameOfSeries = sensor.no
                 var field       = option.field ;
+                var maxValue = 0;
                 var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
                 console.log(fetch_url)
                 
@@ -378,20 +382,24 @@ function fetchData(option){
 				for (var index in data.feeds){
 				var record = data.feeds[index]	
 				parsedData = parseDataLog({ datetime:record.created_at,value:record["field"+field]});
-				list.push( [parsedData.datetime, parsedData.value ] )
+				list.push( [parsedData.datetime, parsedData.value] )
 				lastUpdate = record.created_at
 				
 						
 				}
 					 if (field == 1) {
+
+					 lastEntry.push([sensor.no,parsedData.value])
 					seriesOptions[sensor_index] ={
 								name : nameOfSeries,
 							data : list}
+
                     	}
 						 if (field == 3) {		
 					seriesOptions2[sensor_index] ={
 							name : nameOfSeries,
 								data : list}
+								
 						}
     				
     					
@@ -409,6 +417,21 @@ function fetchData(option){
                        
                             // console.log(roomData);
                             createChart();
+                            
+                           	lastStat(seriesOptions)
+                           	for (var i = lastEntry.length - 1; i >= 0; i--) {
+                           		
+                           		if (lastEntry[i][1] > maxValue){
+                           				maxValue = lastEntry[i][1]
+                           				maxNo = lastEntry[i][0]
+                           			}
+                           		
+                           	};
+                           	
+                           
+                            document.getElementById("Max.value").innerHTML = maxValue.toFixed(2)+ " kW";
+							document.getElementById("Max.no").innerHTML = "No. " + maxNo;
+                            
                         
                         
                     } 
@@ -417,8 +440,7 @@ function fetchData(option){
                        
                             // console.log(roomData);
                            createChart2();
-                        
-                        
+                        calStat(seriesOptions2)
                     } 
                   	
 					
@@ -429,9 +451,57 @@ function fetchData(option){
 		
 
 });
-console.log(seriesOptions[0])
-return list1,list3;
+
+return ;
 }
+function calStat (datain) {
+	var sensor 
+	console.log(datain)
+	for (var index in datain) {
+		
+	
+	data = datain[index].data;
+	name = datain[index].name;
+	
+	
+	for (var index in data) {
+		if (data[index][1] == 0 && max == 0 ) {
+			timemax = "No peak"  
+			sensor = "Anyone"
+			};
+		if (data[index][1] > max ){ 
+			max = data[index][1];
+		timemax = moment(data[index][0]-25200000).format('YYYY-MM-DD HH:mm:ss')  
+	sensor = name
+	console.log(max,timemax,sensor)
+}
+			
+		}
+		
+		
+		
+		};
+		document.getElementById("peak.value").innerHTML = max.toFixed(2) + " A";
+		document.getElementById("peak.time").innerHTML = timemax;
+		document.getElementById("peak.no").innerHTML = "No. " + sensor;
+	
+	}
+function lastStat (data) {
+		data = data[0].data;
+		sumValue = 0
+		order = 0		
+		for(var index in lastEntry){
+			sumValue +=lastEntry[index][1]
+			}
+		
+		lastUnitEntryDate = moment(data[data.length-1][0]-25200000).format('YYYY-MM-DD HH:mm:ss')
+		lastUnitEntry = sumValue
+		
+
+		document.getElementById("Unit.value").innerHTML = lastUnitEntry.toFixed(2)+ " kW";
+		document.getElementById("Unit.time").innerHTML = lastUnitEntryDate;
+}
+
 function getDataValue (field,startDate,endDate,channelID){
 	
 	var fetch_url = serverURL+channelID+'/field/'+field+'.json?&start='+ startDate+'&end='+ endDate ;	
@@ -576,8 +646,8 @@ function cb(start, end) {
     			
     			//getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
     		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-    		document.getElementById("RoomIdHtml").innerHTML = params.roomID;
-    	
+    		document.getElementById("RoomIdHtml").innerHTML = "Room  : "+  params.roomID;
+    		document.title = params.roomID   + " - Power Usage ";
         return;
         //Fetch channel information
 

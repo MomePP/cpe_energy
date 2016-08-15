@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="Peeranut Pongpakatien">
 
-    <title>ACEAM</title>
+    <title>Power Usage</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -26,7 +26,6 @@
 
       <link rel="stylesheet" type="text/css" media="all" href="daterangepicker.css" />
       <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-      <script src="js/jquery.AshAlom.gaugeMeter-2.0.0.min.js"></script> 
       <script type="text/javascript" src="moment.js"></script>
       <script type="text/javascript" src="daterangepicker.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -35,7 +34,59 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+            <style>
+        .dropbtn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 16px;
+            font-size: 22px;
+            cursor: pointer;
+            border: 1px solid transparent;
+              border-radius: 4px;
+              -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+                      box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+              box-shadow: 10px 10px 5px #888888;
+        }
 
+        .dropbtn:hover, .dropbtn:focus {
+            background-color: #c0392b;
+        }
+        #myInput {
+            border-box: box-sizing;
+            background-position: 14px 12px;
+            background-repeat: no-repeat;
+            font-size: 16px;
+            padding: 14px 20px 12px 45px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            z-index: 1000;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f6f6f6;
+            min-width: 100px;
+            overflow: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 6px 8px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown a:hover {background-color: #ddd}
+
+        .show {display:block;}
+        </style>
 </head>
 
 <body>
@@ -46,8 +97,8 @@
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Top Menu Items -->
                 <ul class="nav navbar-left top-nav">
-               <a href="index.html"><img class="navbar-nav" src="image/LIL-Logo-small.png" alt="Learning Inventions Laboratory" style="height:50px;"></a>
-               <a class="navbar-brand" href="index.html">Learning Inventions Laboratory</a>
+               <a href="index.html"><img class="navbar-nav" src="image/662244159.png" alt="Home Page" style="height:50px; border-radius: 25px;"></a>
+               <a class="navbar-brand" href="index.html">A/C Power Usage - Home Page</a>
            </ul>
                     
         </nav>  
@@ -57,9 +108,15 @@
 
                 <!-- Page Heading -->
                 <div class="row">
-                    <div class="col-lg-10"><center>
-                        <h1 class="page-header" >Air Conditioner Energy Audit Meter Dashboard
-                             <br> <small>Department of Computer Engineering, 4th floor of 30th-year-anniversary building<br> Faculty of Engineering, Chiang Mai University. </small>
+                    
+            
+                    
+                    
+                    <!--    <h1 class="page-header"><p id="RoomIdHtml" align = "middle"> Room</p> </h1>-->
+                    <div class="col-lg-12"><center>
+                        <h1 class="page-header" >A/C Power Usage
+                             <br> <small>
+                            Department of Computer Engineering, Floor#4, 30th Year Anniversary Building</small>
                         </h1></center>
                         
 
@@ -69,37 +126,122 @@
                             </li>
                         </ol>  -->
                     </div>
-            
-                    <div class="col-lg-2"><br>
-                        <h1 class="page-header"><p id="RoomIdHtml" align = "middle"> Room</p>
-                        </h1>
-
-                    </div>
+                   
                 </div>
 
         
                 <!-- /.row -->
-
                 <div class="row">
-                  <!--  <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-4"> <center>
+                    <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn" id="RoomIdHtml">DropdownRoom</button>
+                    <h4 >  Click to choose Room</h4>
+                      <div id="myDropdown" class="dropdown-content">
+                        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                        <a href="meter.html?&roomID=401"> Room : 401</a>
+                        <a href="meter.html?&roomID=402"> Room : 402</a>
+                        <a href="meter.html?&roomID=403"> Room : 403</a>
+                        <a href="meter.html?&roomID=404"> Room : 404</a>
+                        <a href="meter.html?&roomID=405"> Room : 405</a>
+                        <a href="meter.html?&roomID=406"> Room : 406</a>
+                        <a href="meter.html?&roomID=407"> Room : 407</a>
+                        <a href="meter.html?&roomID=408"> Room : 408</a>
+                        <a href="meter.html?&roomID=409"> Room : 409</a>
+                        <a href="meter.html?&roomID=411(LD)"> Room : 411(LD)</a>
+                        <a href="meter.html?&roomID=411"> Room : 411</a>
+                        <a href="meter.html?&roomID=412(4th)"> Room : 412(4th)</a>
+                        <a href="meter.html?&roomID=412(1)"> Room : 412(1)</a>
+                        <a href="meter.html?&roomID=412(2)"> Room : 412(2)</a>
+                        <a href="meter.html?&roomID=412(N)"> Room : 412(N)</a>
+                        <a href="meter.html?&roomID=413"> Room : 413</a>
+                        <a href="meter.html?&roomID=413(Gra)"> Room : 413(Gra)</a>
+                        <a href="meter.html?&roomID=414"> Room : 414</a>
+                        <a href="meter.html?&roomID=415"> Room : 415</a>
+                        <a href="meter.html?&roomID=415(LIL)"> Room : 415(LIL)</a>
+                        <a href="meter.html?&roomID=SIPA"> Room : SIPA</a>
+                        <a href="meter.html?&roomID=422"> Room : 422</a>
+
+                     </div>
+                        
+                       </div>
+                       </center>
+                    </div>
+                    
+                            <div class="col-lg-4">
+                                 
+                                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                                <span></span> <b class="caret"></b>
+                                </div>
+                                 <center> <p>Chart Date :</p> <span id="lastTimeUpdate"></span></center>
+                            </div>
+                             <div class="col-lg-4"></div>
+                    </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">          
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Summary</h3>
+                            </div>
+                            <div class="panel-body">
+                   <div class="col-lg-4 col-md-6">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <div class="row">
-                                   <div class="GaugeMeter" id="PreviewGaugeMeter_2" data-percent="88" data-append="A" data-size="200" data-theme="White" data-back="RGBa(0,0,0,.1)" data-animate_gauge_colors="1" data-animate_text_colors="1" data-width="15" data-label="Current" data-style="Arch" data-label_color="#FFF"></div>
-                                </div>
+                                 <div class="col-xs-5 text-center"> 
+                                        <div class="huge" >Total units</div>
+                                    </div>
+                                    <div class="col-xs-7 text-right">
+                                        <div  id="Unit.time"  >Time</div>
+                                        <div class="huge" id="Unit.value" >unitValue</div>
+                                       
+                                    </div>
+                                    </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
+                    
+                    <div class="col-lg-4 col-md-6">
                         <div class="panel panel-green">
                             <div class="panel-heading">
                                 <div class="row">
-                                   <div class="GaugeMeter" id="PreviewGaugeMeter_2" data-percent="88" data-append="A" data-size="200" data-theme="White" data-back="RGBa(0,0,0,.1)" data-animate_gauge_colors="1" data-animate_text_colors="1" data-width="15" data-label="Current" data-style="Arch" data-label_color="#FFF"></div>
-
+                                  <div class="col-xs-5 text-center">
+                                      
+                                        <div class="huge" >Peak units</div>
+                                    </div>
+                                    <div class="col-xs-7 text-right">
+                                        <div class="huge" id="Max.no"  >NO</div>
+                                        <div id="Max.value" >maxValue</div>
+                                       
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="panel panel-red">
+                            <div class="panel-heading">
+                                <div class="row">
+                                  <div class="col-xs-5 text-center">
+                                      
+                                        <div class="huge" >Peak current</div>
+                                    </div>
+                                    <div class="col-xs-7 text-right">
+                                        <div  id="peak.time"  >Time</div>
+                                       <div  id="peak.no"  >no.</div>
+                                        <div class="huge" id="peak.value" >maxValue</div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- 
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-yellow">
                             <div class="panel-heading">
@@ -122,21 +264,7 @@
                     </div>
                 </div>-->
                 <!-- /.row -->
-                <div class="row">
-                    <div class="col-lg-4"> </div>
-                            <div class="col-lg-4">
-                                <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-                                <span></span> <b class="caret"></b>
-                                </div>
-                            </div>
-                             <div class="col-lg-4"></div>
-                    </div>
-                     <div class="row">
-                    
-                            
-                              <center> <p>Last time update :</p> <span id="lastTimeUpdate"></span></center>
-                           </div>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
@@ -166,18 +294,32 @@
                     </div>
                 </div>
                 
-             
-             
-
+            
             </div>
             <!-- /.container-fluid -->
-
+ 
         </div>
         <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->
 
+           <footer class="footer">
+      <div class="container">
+        <center>
+            <div class="row"> <h3>Sponsored by</h3></div>
+            <div class="row">
+             <div class="col-lg-2"></div>
+             <div class="col-lg-4"> <a href="http://cpe.eng.cmu.ac.th/2013/"><img src="image/cpecmu-logo.png" alt="Learning Inventions Laboratory" style="height:50px;"></a>
+        <a href="http://cpe.eng.cmu.ac.th/2013/"><h4 style="color:#fff;">Department of Computer Engineering</h4></a></div>
+             <div class="col-lg-4"><a href="https://learninginventions.org/"><img src="image/LIL-Logo-small.png" alt="Learning Inventions Laboratory" style="height:50px;"></a>
+        <a href="https://learninginventions.org/"><h4 style="color:#fff;">Learning Inventions Laboratory</h4></a></div>
+             <div class="col-lg-2"></div>
+             </div>
+        </center>
+       
+      </div>
+    </footer>
     <!-- jQuery -->
   
 
@@ -192,11 +334,30 @@
   <script src="js/export-csv.js"></script>
   <script type="text/javascript" src="script.js"></script>
   
-  <script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+  <script type="text/javascript" src="js/underscore-min.js"></script>
   <script>
-  $(".GaugeMeter").gaugeMeter();
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
   $(function () {
+
     getTimedate();
+    
 
   });
   </script>

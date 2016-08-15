@@ -229,7 +229,7 @@ function startSort(){
     for (room_index in sorted){
         var room = sorted[room_index];
         unitUsedAllInRoom[0].push(room.name);
-        unitUsedAllInRoom[1].push(room.sum_unit_used);
+        unitUsedAllInRoom[1].push(Number((room.sum_unit_used).toFixed(2)));
     }     
     calStatic()
     document.getElementById("lastTimeUpdate").innerHTML = end.format('YYYY-MM-DD HH:mm:ss');
