@@ -461,7 +461,7 @@ function calStat (datain) {
 			};
 		if (data[index][1] > max ){ 
 			max = data[index][1];
-		timemax = moment(data[index][0]-25200000).format('YYYY-MM-DD HH:mm:ss')  
+		timemax = moment(data[index][0]-25200000).format('DD-MMM-YYYY HH:mm:ss')  
 	sensor = name
 }
 			
@@ -483,7 +483,7 @@ function lastStat (data) {
 			sumValue +=lastEntry[index][1]
 			}
 		
-		lastUnitEntryDate = moment(data[data.length-1][0]-25200000).format('YYYY-MM-DD HH:mm:ss')
+		lastUnitEntryDate = moment(data[data.length-1][0]-25200000).format('DD-MMM-YYYY HH:mm:ss')
 		lastUnitEntry = sumValue
 		
 
@@ -560,7 +560,7 @@ function cb(start, end) {
     		validateParams();
     		fetchData({field: 1 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
     		fetchData({field: 3 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
-    		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
+    		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('DD MMMM YYYY HH:mm:ss');
     		document.getElementById("RoomIdHtml").innerHTML = "Room  : "+  params.roomID;
     		document.title = params.roomID   + " - Power Usage ";
         return;

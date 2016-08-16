@@ -234,7 +234,7 @@ function startSort(){
         unitUsedAllInRoom[1].push(Number((room.sum_unit_used).toFixed(2)));
     }     
     calStatic()
-    document.getElementById("lastTimeUpdate").innerHTML = end.format('YYYY-MM-DD HH:mm:ss');
+    document.getElementById("lastTimeUpdate").innerHTML = end.format('DD MMMM YYYY HH:mm:ss');
     createChart2()
 }
 function calStatic() {
