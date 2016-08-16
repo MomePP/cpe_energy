@@ -126,8 +126,8 @@ function getTimedate() {
 function cb(start, end) {
 
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
-        console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
-        console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
+       // console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
+        //console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
         
         fetchData({results : 1, end:moment(start).format('YYYY-MM-DD HH:mm:ss'), type:'unit_start'});
         fetchData({results : 1, end:moment(end).format('YYYY-MM-DD HH:mm:ss'), type:'unit_end'});
@@ -155,7 +155,7 @@ function initDatePicker(){
    
 
     }, function(start,end){
-        console.log(end)
+        //console.log(end)
         setQueryParameters({start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')
 
     })
@@ -178,11 +178,11 @@ function setQueryParameters(params) {
 }
 
 function fetchData(option){
-    console.log("Loading...");
+    //console.log("Loading...");
     var roomCounter = 0;
 
     $.each(roomData, function(room_index, room){
-            console.log(room);
+          
             var sensorCounter = 0;
             $.each(room.list, function(sensor_index, sensor){
 
@@ -203,7 +203,7 @@ function fetchData(option){
                     }
 
                 }).complete(function() { 
-                    console.log("complete");
+                    
                     sensorCounter += 1;
                     if (sensorCounter === room.list.length) {
                         roomCounter += 1;

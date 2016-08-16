@@ -342,34 +342,21 @@ createChart2 = function () {
 	}
 	function increseData(data){
 		var date = new Date(data.datetime);
-		console.log(date)
 		var localdate = date+1*date.getTimezoneOffset()*60*1000;
 		data.datetime = localdate;
 		data.value    = Number(data.value);
 		return data;
 	}
 
-	function plotRealTime(valueplot) {
-
-    	document.getElementById("Energy.value").innerHTML = valueplot[0];
-    	document.getElementById("Voltage.value").innerHTML = valueplot[1];
-    	document.getElementById("Current.value").innerHTML = valueplot[2];
-    	document.getElementById("Power.value").innerHTML = valueplot[3];
-    	console.log(valueplot);
-
-	}
 	
 
 	
 
 function fetchData(option){
-    console.log("Loading...");
     var roomCounter = 0;
 
     $.each(roomData, function(room_index, room){
             if (room.name!=params.roomID){return;}
-            	console.log(room.name)
-            	console.log(room.list)
             var sensorCounter = 0;
             var parsedData
             $.each(room.list, function(sensor_index, sensor){
@@ -379,9 +366,7 @@ function fetchData(option){
                 var nameOfSeries = "A/C No. "+sensor.no
                 var field       = option.field ;
                 var maxValue = 0;
-                var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option);
-                console.log(fetch_url)
-                
+                var fetch_url   = serverURL+channelID+'/field/'+field+'.json?'+$.param(option); 
                 $.getJSON(fetch_url, function (data) {
                    
 				
@@ -417,12 +402,12 @@ function fetchData(option){
 					
 
                 }).complete(function() { 
-                    console.log("complete");
+                   
                     sensorCounter += 1;
                     if (sensorCounter === room.list.length&&field == 1) {
                         roomCounter += 1;
                        
-                            // console.log(roomData);
+                            
                             createChart();
                             
                            	lastStat(seriesOptions)
@@ -445,8 +430,7 @@ function fetchData(option){
                     if (sensorCounter === room.list.length&&field == 3) {
                         roomCounter += 1;
                        
-                            // console.log(roomData);
-                           createChart2();
+                        createChart2();
                         calStat(seriesOptions2)
                     } 
                   	
@@ -463,7 +447,6 @@ return ;
 }
 function calStat (datain) {
 	var sensor 
-	console.log(datain)
 	for (var index in datain) {
 		
 	
@@ -480,7 +463,6 @@ function calStat (datain) {
 			max = data[index][1];
 		timemax = moment(data[index][0]-25200000).format('YYYY-MM-DD HH:mm:ss')  
 	sensor = name
-	console.log(max,timemax,sensor)
 }
 			
 		}
@@ -570,21 +552,14 @@ function getTimedate() {
 function cb(start, end) {
 
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
-        console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
-        console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
+        //console.log(moment(start).format('YYYY-MM-DD HH:mm:ss'))
+        //console.log(moment(end).format('YYYY-MM-DD HH:mm:ss'))
        
-       	channelKey =0
-        params = getUrlParameter();
-    	validateParams();
-
-    	
-    			//saveData[i][j] = getDataValue(start._d,end._d,102+room4rdFloor[i][j]);
-    			
-    			//getDataValue(3,,101+Number(room4rdFloor[i][j]))
+       		channelKey =0
+        	params = getUrlParameter();
+    		validateParams();
     		fetchData({field: 1 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
     		fetchData({field: 3 ,start : moment(start).format('YYYY-MM-DD HH:mm:ss'),end : moment(end).format('YYYY-MM-DD HH:mm:ss')});
-    			
-    			//getDataValue(start._d,end._d,101+Number(room4rdFloor[i][j]))
     		document.getElementById("lastTimeUpdate").innerHTML = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
     		document.getElementById("RoomIdHtml").innerHTML = "Room  : "+  params.roomID;
     		document.title = params.roomID   + " - Power Usage ";
@@ -611,7 +586,7 @@ function initDatePicker(){
    
 
     }, function(start,end){
-        console.log(end)
+        //console.log(end)
         setQueryParameters({roomID:params.roomID,start:start.format('YYYY-MM-DD HH:mm:ss'),end:end.format('YYYY-MM-DD HH:mm:ss')
 
     })
